@@ -53,7 +53,14 @@ class Application(tk.Frame):
         self.G.zero = 15
 
     def change(self, pos, ind):
-        print(pos)
+        new_pos = self.G.zero
+        if((pos//4 == new_pos//4 and abs(pos%4 - new_pos%4) == 1) or (pos%4 == new_pos%4 and abs(pos//4 - new_pos//4) == 1)):
+            self.G.newb[ind].grid(sticky = 'nsew',column=self.G.zero%4, row=self.G.zero//4)
+            changexy = partial(self.change, self.G.zero, ind)
+            self.G.zero = pos
+            self.G.newb[ind]["command"] = changexy
+            self.G.newb_pos[ind] = new_pos
+
 
 
 
