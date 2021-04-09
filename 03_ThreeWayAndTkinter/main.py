@@ -3,6 +3,7 @@
 import tkinter as tk
 import random
 from functools import partial
+from tkinter import messagebox as mb
 
 
 class Application(tk.Frame):
@@ -13,7 +14,7 @@ class Application(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        F = tk.LabelFrame(self.master, text="frame", relief="groove")
+        F = tk.LabelFrame(self.master)
         F.columnconfigure(0, weight=1)
         F.grid(sticky = 'new')
 
@@ -26,20 +27,25 @@ class Application(tk.Frame):
                               command=self.master.destroy)
         F.quit.grid(column=1, row=0)  
 
-        self.G = tk.LabelFrame(self.master, text="game", relief="groove")
+        self.G = tk.LabelFrame(self.master)
         self.G.grid()
         self.do_new()
 
     def do_new(self):
         self.G.grid_forget()
-        self.G = tk.LabelFrame(self.master, text="game", relief="groove")
+        self.G = tk.LabelFrame(self.master)
         for i in range(4):
             self.G.columnconfigure(i,weight=1)
             self.G.rowconfigure(i,weight=1)
         self.G.grid(sticky ='nsew')
 
         l = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-        perm = sorted(l, key=lambda *args: random.random())
+
+
+        if (0): #change for easy win
+            perm = [1,2,3,4,5,6,7,8,9,10,12,15,13,14,11]
+        else:
+            perm = sorted(l, key=lambda *args: random.random())
 
         self.G.newb = []
         self.G.newb_pos = []
@@ -60,6 +66,19 @@ class Application(tk.Frame):
             self.G.zero = pos
             self.G.newb[ind]["command"] = changexy
             self.G.newb_pos[ind] = new_pos
+            self.win_test()
+
+    def win_test(self):
+        flag = True
+        for i in  range(0,15):
+            if(self.G.newb[i]["text"] != self.G.newb_pos[i] + 1 ):
+                flag = False
+        if flag:
+            mb.showinfo(
+            "Info",
+            "Easy win!")
+            self.do_new()
+
 
 
 
